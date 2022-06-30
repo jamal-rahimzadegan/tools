@@ -1,75 +1,82 @@
-import ls from "./storage";
+import { ls, session } from "./storage";
+import webStorageKeys from "./web-storage-keys";
+
+const targetStorage = false ? ls : session; // change it to test both
 
 describe("LS should work for single operations ", () => {
-    const singleKey = "singleKey";
-    let testValue;
+	const { userToken, items } = webStorageKeys;
+	let tokenValue = "";
 
-    const createItem = (value) => {
-        ls.set(singleKey, value);
-        testValue = ls.get(singleKey);
-    };
+	const createItem = (value) => {
+		targetStorage.set(userToken, value);
+		tokenValue = targetStorage.get(userToken);
+	};
 
-    it("number", () => {
-        createItem(7);
-        expect(testValue).toBe(7);
-    });
+	it("number", () => {
+		createItem(7);
+		expect(tokenValue).toBe(7);
+	});
 
-    it("string", () => {
-        createItem("random-string");
-        expect(testValue).toBe("random-string");
-    });
+	it("string", () => {
+		createItem("random-string");
+		expect(tokenValue).toBe("random-string");
+	});
 
-    it("null", () => {
-        createItem(null);
-        expect(testValue).toBe(null);
-    });
+	it("null", () => {
+		createItem(null);
+		expect(tokenValue).toBe(null);
+	});
 
-    it("undefined", () => {
-        createItem(undefined);
-        expect(testValue).toBe("undefined");
-    });
+	it("undefined", () => {
+		createItem(undefined);
+		expect(tokenValue).toBe("undefined");
+	});
 
-    it("object", () => {
-        const MOCK_OBJECT = [
-            { name: "John Doe", isDeveloper: true, city: null, info: { age: 16 } },
-        ];
-        createItem(MOCK_OBJECT);
-        expect(testValue).toStrictEqual(MOCK_OBJECT);
-    });
+	it("object", () => {
+		createItem({});
+		expect(tokenValue).toStrictEqual({});
+	});
 
-    it("remove", () => {
-        ls.remove(singleKey);
-        expect(ls.get(singleKey)).toStrictEqual(null);
-    });
+	it("remove", () => {
+		targetStorage.remove(userToken);
+		expect(targetStorage.get(userToken)).toStrictEqual(null);
+	});
 });
 
 //------------------------------------------------------------------
 describe("LS should work for multiple operations ", () => {
-    const items = { name: "John", family: "Doe", info: { age: 16 } };
-    const multipleKeyToGet = Object.keys(items);
-    ls.setMultiple(items);
+	const { multipleItems } = webStorageKeys;
+	const multipleKeyToGet = Object.keys(multipleItems);
 
-    it("getMultiple", () => {
-        const multiResult = ls.getMultiple(multipleKeyToGet);
-        const allResult = ls.getAll();
+	targetStorage.clear();
+	targetStorage.setMultiple(multipleItems);
 
-        expect(multiResult).toStrictEqual(items);
-        expect(allResult).toStrictEqual(items);
-    });
+	beforeAll(() => {
+		targetStorage.clear();
+		targetStorage.setMultiple(multipleItems);
+	});
 
-    it("removeMultiple", () => {
-        ls.removeMultiple(multipleKeyToGet);
-        expect(ls.getAll()).toStrictEqual({});
-    });
+	it("getMultiple", () => {
+		const multiResult = targetStorage.getMultiple(multipleKeyToGet);
+		const allResult = targetStorage.allItems;
 
-    it("removeAll", () => {
-        ls.removeAll();
-        expect(ls.getAll()).toStrictEqual({});
-    });
+		expect(multiResult).toStrictEqual(multipleItems);
+		expect(allResult).toStrictEqual(multipleItems);
+	});
+
+	it("removeMultiple", () => {
+		targetStorage.removeMultiple(multipleKeyToGet);
+		expect(targetStorage.allItems).toStrictEqual({});
+	});
+
+	it("removeAll", () => {
+		targetStorage.clear();
+		expect(targetStorage.allItems).toStrictEqual({});
+	});
 });
 
 //------------------------------------------------------------------
-//Todo: Enable this test if you want to test internals and you should make them public
+// Enable this test if you want to test internals and you should make them public
 
 // describe("LS internal should work", () => {
 // 	const { checkPrimitive, checkJSON } = ls;

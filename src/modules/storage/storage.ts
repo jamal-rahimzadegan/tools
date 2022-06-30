@@ -1,17 +1,25 @@
-const webStorageKeys = {};
+import webStorageKeys from "./web-storage-keys";
 
 type Keys = keyof typeof webStorageKeys;
 type MultipleItem = Partial<Record<Keys, any>>;
 type ItemDestruction = [Keys, any];
+type TargetStorage = "localStorage" | "sessionStorage";
 
 class Storage {
-	get(key: Keys) {
+	storage: typeof localStorage | typeof sessionStorage;
+
+	constructor(storage: TargetStorage) {
+		this.storage = window[storage];
+	}
+
+	get(key: Keys): string | null {
 		try {
-			const value = localStorage.getItem(key);
+			const value = this.storage.getItem(String(key));
 			const isJson = this.checkJSON(value);
 			return isJson ? JSON.parse(value) : value;
 		} catch (e) {
 			console.error("err in ls get", e);
+			return null;
 		}
 	}
 
@@ -19,25 +27,20 @@ class Storage {
 		try {
 			let items: MultipleItem = {};
 			let i = keys.length;
-			while (i--) {
-				// @ts-ignore
-				items[keys[i]] = this.get(keys[i]);
-			}
+			while (i--) items[keys[i]] = this.get(keys[i]);
+
 			return items;
 		} catch (e) {
 			console.error("err in ls get multi", e);
 		}
 	}
 
-	getAll() {
+	get allItems(): MultipleItem {
 		try {
-			let items = {};
-			let keys = Object.keys(localStorage) as Array<Keys>;
+			let items: MultipleItem = {};
+			let keys = Object.keys(this.storage) as Array<Keys>;
 			let i = keys.length;
-			while (i--) {
-				// @ts-ignore
-				items[keys[i]] = this.get(keys[i]);
-			}
+			while (i--) items[keys[i]] = this.get(keys[i]);
 
 			return items;
 		} catch (e) {
@@ -49,7 +52,7 @@ class Storage {
 		try {
 			const isPrimitive = this.checkPrimitive(value);
 			const updatedValue = isPrimitive ? value : JSON.stringify(value);
-			localStorage.setItem(key, updatedValue);
+			this.storage.setItem(String(String(key)), updatedValue);
 		} catch (e) {
 			console.error("err in ls set", e);
 		}
@@ -57,7 +60,7 @@ class Storage {
 
 	setMultiple(items: MultipleItem) {
 		try {
-			return Object.entries(items).forEach(([key, value]: ItemDestruction) => {
+			Object.entries(items).forEach(([key, value]: ItemDestruction) => {
 				this.set(key, value);
 			});
 		} catch (e) {
@@ -67,7 +70,7 @@ class Storage {
 
 	remove(key: Keys) {
 		try {
-			return localStorage.removeItem(key);
+			return this.storage.removeItem(String(key));
 		} catch (e) {
 			console.error("err in ls remove", e);
 		}
@@ -81,9 +84,9 @@ class Storage {
 		}
 	}
 
-	removeAll() {
+	clear() {
 		try {
-			return localStorage.clear();
+			return this.storage.clear();
 		} catch (e) {
 			console.error("err in ls remove all", e);
 		}
@@ -105,4 +108,7 @@ class Storage {
 	}
 }
 
-export default new Storage();
+const ls = new Storage("localStorage");
+const session = new Storage("sessionStorage");
+
+export { ls, session };
