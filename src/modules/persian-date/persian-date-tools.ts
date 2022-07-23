@@ -65,7 +65,7 @@ class PersianDateTools {
 	}
 
 	isFriday(dayInWeek: number): boolean {
-		// 6th day of the week in the persian calendar is Friday
+		// 6th day of the week in jalali calendar is Friday
 		return dayInWeek === 6;
 	}
 }
