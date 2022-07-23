@@ -1,16 +1,18 @@
-import React, { useEffect } from "react";
-import WorkerService from "./worker";
-// @ts-ignore
-import testWorkerFile from "./test-worker";
-
-let testWorker;
+import React, { useEffect, useState } from "react";
+import WorkerTool from "./worker-tool";
+const testWorkerFile = require("./test-worker");
 
 export default function Index() {
+	const [testWorker, setTestWorker] = useState<any>({});
+
 	const handleWorker = () => {
-		testWorker = new WorkerService(testWorkerFile);
-		testWorker.onmessage = (e) => {
+		let tempWorker: any = new WorkerTool(testWorkerFile);
+
+		tempWorker.onmessage = (e) => {
 			console.log(`--- data ----> `, e.data);
 		};
+
+		setTestWorker(tempWorker);
 	};
 
 	useEffect(handleWorker, []);
