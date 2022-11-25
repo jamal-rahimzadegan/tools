@@ -8,3 +8,4 @@
 - **Date (jalali)** 
 - **Web Workers** 
 - **Storage:** easily work with `localStorage` and `sessionStorage` 
+- **Cookie:**  create and read cookies
