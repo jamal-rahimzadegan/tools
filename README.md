@@ -8,3 +8,4 @@
 - **Date (jalali)** 
 - **Web Workers** 
 - **Storage:** easily work with `localStorage` and `sessionStorage` and `Cookies`
+- **API:** advanced wrapper for Axios (http-client)
