@@ -7,5 +7,4 @@
 - **Numbers** 
 - **Date (jalali)** 
 - **Web Workers** 
-- **Storage:** easily work with `localStorage` and `sessionStorage` 
-- **Cookie:**  create and read cookies
+- **Storage:** easily work with `localStorage` and `sessionStorage` and `Cookies`
