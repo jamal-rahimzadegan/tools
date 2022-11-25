@@ -74,25 +74,3 @@ describe("LS should work for multiple operations ", () => {
 		expect(targetStorage.allItems).toStrictEqual({});
 	});
 });
-
-//------------------------------------------------------------------
-// Enable this test if you want to test internals and you should make them public
-
-// describe("LS internal should work", () => {
-// 	const { checkPrimitive, checkJSON } = ls;
-//
-// 	it("checkPrimitive", () => {
-// 		expect(checkPrimitive(null)).toBe(true);
-// 		expect(checkPrimitive(true)).toBe(true);
-// 		expect(checkPrimitive("string")).toBe(true);
-// 		expect(checkPrimitive(7)).toBe(true);
-// 		expect(checkPrimitive(Symbol("id"))).toBe(true);
-// 		expect(checkPrimitive(() => {})).toBe(false);
-// 		expect(checkPrimitive({})).toBe(false);
-// 	});
-//
-// 	it("checkJSON", () => {
-// 		expect(checkJSON("random-string")).toBe(false);
-// 		expect(checkJSON(JSON.stringify({ key: "value" }))).toBe(true);
-// 	});
-// });

@@ -1,6 +1,7 @@
 ## Some useful `JS` based tools for day to day coding ☕
 
-#### These are `typescript` modules that you can easily use in your projects.
+#### You just need to grab the desired `tool` from `src`.
+* I have used React in this repo, and you can ignore it.
 
 
 ### These tools are included (and many will be coming soon ✌)

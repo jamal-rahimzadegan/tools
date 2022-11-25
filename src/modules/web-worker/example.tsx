@@ -3,7 +3,7 @@ import WorkerTool from "./worker-tool";
 const testWorkerFile = require("./test-worker");
 
 export default function Index() {
-	const [testWorker, setTestWorker] = useState<any>({});
+	const [mockWorker, setMockWorker] = useState<object>({});
 
 	const handleWorker = () => {
 		let tempWorker: any = new WorkerTool(testWorkerFile);
@@ -12,14 +12,14 @@ export default function Index() {
 			console.log(`--- data ----> `, e.data);
 		};
 
-		setTestWorker(tempWorker);
+		setMockWorker(tempWorker);
 	};
 
 	useEffect(handleWorker, []);
 
 	return (
 		<>
-			<button onClick={() => testWorker.postMessage(0 ? 100_000 : 50)}>
+			<button onClick={() => mockWorker.postMessage(0 ? 100_000 : 50)}>
 				Run a heavy task
 			</button>
 			<p>Can you click and select me without problem?</p>
