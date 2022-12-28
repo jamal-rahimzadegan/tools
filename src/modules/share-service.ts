@@ -1,23 +1,24 @@
-// TODO: complete it
-
-type SocialMedias = 'WHATSAPP' | 'FACEBOOK' | 'TWITTER'
+type SocialMedias = 'TELEGRAM'
 
 class ShareService {
-  SHARE_URL_SET: Record<SocialMedias, string>
+  private readonly URL_SET: Record<SocialMedias, string>
 
   constructor() {
-    this.SHARE_URL_SET = {
-      WHATSAPP: 'https://api.whatsapp.com/send/?text=',
-      FACEBOOK: 'https://www.facebook.com/sharer/sharer.php?u=',
-      TWITTER: 'https://twitter.com/intent/tweet?text=',
+    this.URL_SET = {
+      TELEGRAM: `https://t.me/share/url?s=&text=`, // NOTE: Maybe is changed
     }
+  }
 
-    Object.entries(this.SHARE_URL_SET).forEach(([media, shareUrl]) => {
-      this[media.toLowerCase()] = (content: string) => {
-        window.open(shareUrl + ' ' + content, '_blank', 'noopener,noreferrer')
-      }
-    })
+  private generateOpener(shareUrl: string, content: string) {
+    window.open(shareUrl + content, '_blank', 'noopener,noreferrer')
+  }
+
+  telegram(content: string) {
+    this.generateOpener(this.URL_SET.TELEGRAM, content)
   }
 }
 
-const shareOn = new ShareService()
+export const shareService = new ShareService()
+
+// Usage:
+// shareService.telegram('SOME_CONTENT')
