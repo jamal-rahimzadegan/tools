@@ -5,7 +5,7 @@ class ShareService {
 
   constructor() {
     this.URL_SET = {
-      TELEGRAM: `https://t.me/share/url?s=&text=`, // NOTE: Maybe is changed
+      TELEGRAM: `https://t.me/share/url?s=&text=`, // NOTE: Maybe it is changed
     }
   }
 
