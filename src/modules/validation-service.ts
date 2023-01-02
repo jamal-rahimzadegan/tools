@@ -1,27 +1,31 @@
-type RegexList = 'IS_MOBILE_NUM' | 'HAS_HTML'
+type Matchers = "IS_MOBILE_NUM" | "HAS_SCRIPT";
 
 type RegexSet = {
-  [key in RegexList]: RegExp
-}
+  [key in Matchers]: RegExp;
+};
+
+type Validationtype = ValidationService;
 
 class ValidationService {
-  readonly REGEX_SET: RegexSet
+  private readonly REGEX_SET: RegexSet;
 
   constructor() {
     this.REGEX_SET = {
       IS_MOBILE_NUM: /^09\d{9}$/,
-      HAS_HTML: /<\/?[a-z][\s\S]*>/i,
-    }
+      HAS_SCRIPT: /<\/?[a-z][\s\S]*>/i
+    };
   }
 
   private check(regExp: keyof RegexSet, txt: string): boolean {
-    return this.REGEX_SET[regExp].test(txt) // outputs true
+    return this.REGEX_SET[regExp].test(txt);
   }
 
-  isMobile = (txt: string) => this.check('IS_MOBILE_NUM', txt)
+  isMobile = (txt: string) => this.check("IS_MOBILE_NUM", txt);
 
-  hasHtml = (txt: string) => this.check('HAS_HTML', txt)
+  hasNoScript = (txt: string) => !this.check("HAS_SCRIPT", txt);
 }
 
-const validationService = new ValidationService()
-export default validationService
+const validationService = new ValidationService();
+
+export type { Validationtype };
+export default validationService;
