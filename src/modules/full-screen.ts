@@ -19,3 +19,14 @@ class FullScreen {
 }
 
 export default new FullScreen()
+
+
+// Usage (React): 
+// <div id='fullscreen'>
+//         <p>Some Fake Text</p>
+//         <button onClick={exitFullScreen}>Exit</button>
+//         <button onClick={goFullScreen}>Go</button>
+// </div>
+
+// const goFullScreen = () => fullScreen.enter('fullscreen')
+// const exitFullScreen = () => fullScreen.exit()
