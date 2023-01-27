@@ -11,9 +11,6 @@ export default class ApiService {
         METHODS.forEach((method) => (this[method] = this.createAdvancedRequest.bind(this, method)));
     }
 
-    protected handleTokenRefresh = () => {
-    };
-
     protected createAdvancedRequest(method: Method, api: string, config: AxiosRequestConfig) {
         return createCustomizedRequest(method, api, config);
     }
@@ -22,7 +19,11 @@ export default class ApiService {
         return createSimpleRequest(config);
     }
 
-    refreshToken() {
-        //    You can add it here
-    }
+   async refreshToken() {
+    const { newToken } = await this.createAdvancedRequest.post("refresh-token",
+    { refreshToken: "YOUR_REFRESH_TOKEN"} );
+
+    // Update the old token
+    localStorage.setItem("token", newToken);
+  }
 }
