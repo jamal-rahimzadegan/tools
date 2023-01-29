@@ -20,8 +20,7 @@ export default class ApiService {
     }
 
    async refreshToken() {
-    const { newToken } = await this.createAdvancedRequest.post("refresh-token",
-    { refreshToken: "YOUR_REFRESH_TOKEN"} );
+    const { newToken } = await this.post("REFRESH_TOKEN_ENDPOINT", { refreshToken: "YOUR_REFRESH_TOKEN"} );
 
     // Update the old token 
     // this.token=newToken
