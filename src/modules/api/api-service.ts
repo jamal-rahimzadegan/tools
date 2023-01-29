@@ -23,8 +23,8 @@ export default class ApiService {
     const { newToken } = await this.createAdvancedRequest.post("refresh-token",
     { refreshToken: "YOUR_REFRESH_TOKEN"} );
 
-    // Update the old token
+    // Update the old token 
     // this.token=newToken
-    // localStorage.setItem("token", newToken); // or cookie
+    // localStorage.setItem("token", newToken); // or cookie or maybe with intercept
   }
 }
