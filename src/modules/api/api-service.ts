@@ -24,6 +24,7 @@ export default class ApiService {
     { refreshToken: "YOUR_REFRESH_TOKEN"} );
 
     // Update the old token
-    localStorage.setItem("token", newToken);
+    // this.token=newToken
+    // localStorage.setItem("token", newToken); // or cookie
   }
 }
