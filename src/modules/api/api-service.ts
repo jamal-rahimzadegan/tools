@@ -18,6 +18,18 @@ export default class ApiService {
     simple(config: AxiosRequestConfig) {
         return createSimpleRequest(config);
     }
+    
+    private async checkIsOnline(): Promise<boolean> {
+    if (typeof document === "undefined") return false;
+
+    try {
+      const { status } = await axios.get(""); // request to the current site
+      return status >= 200 && status < 300;
+    } catch (err) {
+      console.error("Problem With Your Internet Connection");
+      return false;
+    }
+  }
 
    async refreshToken() {
     const { newToken } = await this.post("REFRESH_TOKEN_ENDPOINT", { refreshToken: "YOUR_REFRESH_TOKEN"} );
