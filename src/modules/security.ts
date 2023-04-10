@@ -5,10 +5,10 @@ class Security {
     return bcrypt.hashSync(plainData, 10)
   }
 
-  matchData(plainData: string, hashData: string): boolean {
+  matchData(plainData: string, hashData: string, cb: (res: boolean) => any) {
     bcrypt.compare(plainData, hashData, (err, isMatch) => {
-      if (err) this.handleErr(err, 'matching hash')
-      return isMatch
+      if (err) return this.handleErr(err, 'matching hash')
+      return cb(isMatch)
     })
   }
 
