@@ -5,14 +5,10 @@ class Security {
     return bcrypt.hashSync(plainData, 10)
   }
 
-  retrieveHashedData(hashedData: string): string {
-    return bcrypt.getSalt(hashedData)
-  }
-
-  matchData(plainData: string, hashData: string) {
+  matchData(plainData: string, hashData: string): boolean {
     bcrypt.compare(plainData, hashData, (err, isMatch) => {
-      if (err) return this.handleErr(err, 'matching hash')
-      return console.info('Does Match: ', isMatch)
+      if (err) this.handleErr(err, 'matching hash')
+      return isMatch
     })
   }
 
