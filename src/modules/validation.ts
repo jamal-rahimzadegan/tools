@@ -27,7 +27,8 @@ const validation = new Validation();
 export default validation;
 
 
-// Usage (in React)
+/* Example of usage (in React)
+
 export default function DummyValidation() {
   const htmlCode = `<p>It's my input</p> <img src="?" onerror=alert('hacked') >`;
 
@@ -47,3 +48,4 @@ export default function DummyValidation() {
     </>
   );
 }
+*/
