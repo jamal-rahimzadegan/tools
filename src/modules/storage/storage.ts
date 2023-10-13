@@ -33,16 +33,15 @@ class WebStorage {
   }
 
   get allItems(): MultipleItem {
+    let items: MultipleItem = {}
     try {
-      let items: MultipleItem = {}
       let keys = Object.keys(this.storage) as Array<Keys>
       let i = keys.length
       while (i--) items[keys[i]] = this.get(keys[i])
-
       return items
     } catch (err) {
       console.error('err in ls get all', err)
-      return {}
+      return items
     }
   }
 
@@ -50,7 +49,7 @@ class WebStorage {
     try {
       const isPrimitive = checkIsPrimitive(value)
       const updatedValue = isPrimitive ? value : JSON.stringify(value)
-      this.storage.setItem(String(String(key)), updatedValue)
+      this.storage.setItem(key, updatedValue)
     } catch (err) {
       console.error(`err in setting ${key}`, err)
     }
@@ -70,7 +69,7 @@ class WebStorage {
     try {
       return this.storage.removeItem(key)
     } catch (err) {
-      console.error('err in ls remove', err)
+      console.error(`err while removing ${key}`, err)
     }
   }
 
@@ -91,7 +90,7 @@ class WebStorage {
   }
 }
 
-const ls = new WebStorage("localStorage");
-const session = new WebStorage("sessionStorage");
+const ls = new WebStorage('localStorage')
+const session = new WebStorage('sessionStorage')
 
-export {ls, session};
+export { ls, session }
