@@ -3,89 +3,90 @@ import {ItemDestruction, Keys, MultipleItem, TargetStorage} from "./types";
 import {checkIsJSON, checkIsPrimitive} from "./helpers";
 
 class WebStorage {
-  storage: typeof localStorage | typeof sessionStorage;
+  storage: typeof localStorage | typeof sessionStorage
 
   constructor(storage: TargetStorage) {
-    this.storage = window[storage];
+    this.storage = window[storage]
   }
 
   get(key: Keys): string | null {
     try {
-      const value = this.storage.getItem(String(key));
-      const isJson = checkIsJSON(value);
-      return isJson ? JSON.parse(value) : value;
-    } catch (e) {
-      console.error("err in ls get", e);
-      return null;
+      const value = this.storage.getItem(key.toString())!?.toString()
+      const isJson = checkIsJSON(value!?.toString())
+      return isJson ? JSON.parse(value) : value
+    } catch (err) {
+      console.error(`cannot retrieve ${key}`, err)
+      return null
     }
   }
 
   getMultiple(keys: Keys[]) {
     try {
-      let items: MultipleItem = {};
-      let i = keys.length;
-      while (i--) items[keys[i]] = this.get(keys[i]);
+      let items: MultipleItem = {}
+      let i = keys.length
+      while (i--) items[keys[i]] = this.get(keys[i])
 
-      return items;
-    } catch (e) {
-      console.error("err in ls get multi", e);
+      return items
+    } catch (err) {
+      console.error('could not retrieve keys', err)
     }
   }
 
   get allItems(): MultipleItem {
     try {
-      let items: MultipleItem = {};
-      let keys = Object.keys(this.storage) as Array<Keys>;
-      let i = keys.length;
-      while (i--) items[keys[i]] = this.get(keys[i]);
+      let items: MultipleItem = {}
+      let keys = Object.keys(this.storage) as Array<Keys>
+      let i = keys.length
+      while (i--) items[keys[i]] = this.get(keys[i])
 
-      return items;
-    } catch (e) {
-      console.error("err in ls get all", e);
+      return items
+    } catch (err) {
+      console.error('err in ls get all', err)
+      return {}
     }
   }
 
   set(key: Keys, value: any) {
     try {
-      const isPrimitive = checkIsPrimitive(value);
-      const updatedValue = isPrimitive ? value : JSON.stringify(value);
-      this.storage.setItem(String(String(key)), updatedValue);
-    } catch (e) {
-      console.error("err in ls set", e);
+      const isPrimitive = checkIsPrimitive(value)
+      const updatedValue = isPrimitive ? value : JSON.stringify(value)
+      this.storage.setItem(String(String(key)), updatedValue)
+    } catch (err) {
+      console.error(`err in setting ${key}`, err)
     }
   }
 
   setMultiple(items: MultipleItem) {
     try {
       Object.entries(items).forEach(([key, value]: ItemDestruction) => {
-        this.set(key, value);
-      });
-    } catch (e) {
-      console.error("err in ls set multi", e);
+        this.set(key, value)
+      })
+    } catch (err) {
+      console.error(`err in setting keys`, err)
     }
   }
 
   remove(key: Keys) {
     try {
-      return this.storage.removeItem(String(key));
-    } catch (e) {
-      console.error("err in ls remove", e);
+      return this.storage.removeItem(key)
+    } catch (err) {
+      console.error('err in ls remove', err)
     }
   }
 
   removeMultiple(keys: Keys[]) {
     try {
-      return keys.forEach((k) => this.remove(k));
-    } catch (e) {
-      console.error("err in ls remove multi", e);
+      return keys.forEach((k) => this.remove(k))
+    } catch (err) {
+      console.error(`err in removing entries`, err)
     }
   }
 
   clear() {
     try {
-      return this.storage.clear();
-    } catch (e) {
-      console.error("err in ls remove all", e);
+      return this.storage.clear()
+    } catch (err) {
+      console.error(`err in clearing ${this.storage} data`, err)
     }
   }
 }
