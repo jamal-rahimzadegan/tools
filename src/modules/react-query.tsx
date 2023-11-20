@@ -31,7 +31,7 @@ class ReactQueryService {
     this.cache = new QueryCache()
   }
 
-  generateProvider = ({ children }: PropsWithChildren) => (
+  wrapProvider = ({ children }: PropsWithChildren) => (
     <QueryClientProvider client={this.client}>{children}</QueryClientProvider>
   )
 
@@ -56,7 +56,7 @@ class ReactQueryService {
 }
 
 const querySvc = new ReactQueryService()
-const QueryProvider = querySvc.generateProvider
+const QueryProvider = querySvc.wrapProvider
 const useReactQuery = querySvc.wrapUseQuery
 
 export { querySvc, QueryProvider, useReactQuery }
