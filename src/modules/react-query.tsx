@@ -60,3 +60,21 @@ const QueryProvider = querySvc.wrapProvider
 const useReactQuery = querySvc.wrapUseQuery
 
 export { querySvc, QueryProvider, useReactQuery }
+
+
+// Usage
+// function useGetUser() {
+//   const getData = async () => {
+//     const res = await fetch('https://jsonplaceholder.typicode.com/todos/1')
+//     return await res.json()
+//   }
+
+//   return useReactQuery<UserDetailsRes>('GET_USER_INFO', getData, {
+//     enabled: false,
+//   })
+// }
+
+// export default function Test() {
+//   const { refetch: getUserInfo, data } = useGetUser()
+//   return <button onClick={getUserInfo}>Get Info</button>
+// }
