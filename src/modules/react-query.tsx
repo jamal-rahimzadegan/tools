@@ -1,3 +1,4 @@
+import { PropsWithChildren } from 'react'
 import {
   QueryCache,
   QueryClient,
@@ -7,7 +8,6 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from 'react-query'
-import { PropsWithChildren } from 'react'
 
 type KeysType = keyof typeof KEYS
 
@@ -23,16 +23,18 @@ const KEYS = {
 }
 
 class ReactQueryService {
-  readonly client: QueryClient
-  private readonly cache: QueryCache
+  readonly queryClient: QueryClient
+  private readonly queryCache: QueryCache
 
   constructor() {
-    this.client = new QueryClient()
-    this.cache = new QueryCache()
+    this.queryClient = new QueryClient()
+    this.queryCache = new QueryCache()
   }
 
   wrapProvider = ({ children }: PropsWithChildren) => (
-    <QueryClientProvider client={this.client}>{children}</QueryClientProvider>
+    <QueryClientProvider client={this.queryClient}>
+      {children}
+    </QueryClientProvider>
   )
 
   // R stands for the response type
@@ -46,11 +48,11 @@ class ReactQueryService {
   }
 
   async reFetch(queryKey: KeysType) {
-    await this.client.invalidateQueries(queryKey)
+    await this.queryClient.invalidateQueries(queryKey)
   }
 
   async clearCache(cb?: Function) {
-    await this.client.invalidateQueries()
+    await this.queryClient.invalidateQueries()
     cb?.()
   }
 }
@@ -60,21 +62,3 @@ const QueryProvider = querySvc.wrapProvider
 const useReactQuery = querySvc.wrapUseQuery
 
 export { querySvc, QueryProvider, useReactQuery }
-
-
-// Usage
-// function useGetUser() {
-//   const getData = async () => {
-//     const res = await fetch('https://jsonplaceholder.typicode.com/todos/1')
-//     return await res.json()
-//   }
-
-//   return useReactQuery<UserDetailsRes>('GET_USER_INFO', getData, {
-//     enabled: false,
-//   })
-// }
-
-// export default function Test() {
-//   const { refetch: getUserInfo, data } = useGetUser()
-//   return <button onClick={getUserInfo}>Get Info</button>
-// }
