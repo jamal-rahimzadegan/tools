@@ -1,15 +1,18 @@
 type ComplexObject<T = string | number | symbol> = Record<T, any>;
 type NestedObject = Record<string, any>;
+type SwitchCase = {
+  [K in 'camel' | 'kebab']: (str: string) => string;
+};
 
 const REGEX_SET = {
   engNum: /[0-9]/g,
-  perNum: [/?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g]
+  perNum: [/?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g, /?/g],
+  CHECK_KEBAB: /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g,
+  CHECK_CAMEL: /(?:^\w|[A-Z]|\b\w|\s+)/g
 };
 
 const PERSIAN_DIGITS = ['?', '?', '?', '?', '?', '?', '?', '?', '?', '?'];
 const ENGLISH_DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-export { REGEX_SET, PERSIAN_DIGITS, ENGLISH_DIGITS };
 
 class StringUtilize {
   constructor() {}
@@ -62,6 +65,23 @@ class StringUtilize {
     if ([undefined, null].includes(txt)) return '';
     if (typeof txt === 'number') return txt.toString();
     return txt;
+  }
+
+  get case(): SwitchCase {
+    return {
+      camel(str) {
+        return str.replace(REGEX.CHECK_CAMEL, function (match, i) {
+          if (+match === 0) return ''; // or if (/\s+/.test(match)) for white spaces
+          return i === 0 ? match.toLowerCase() : match.toUpperCase();
+        });
+      },
+      kebab(str) {
+        return str
+          .match(REGEX.CHECK_KEBAB)
+          .map((x) => x.toLowerCase())
+          .join('-');
+      }
+    };
   }
 }
 
