@@ -10,34 +10,54 @@ import {
 import { QUERY_KEYS } from './query-keys'
 
 class GqlService {
-  readonly client: ApolloClient<any>
+  readonly client: ApolloClient<unknown>;
 
   constructor() {
     this.client = new ApolloClient({
       cache: new InMemoryCache(),
       link: createHttpLink({
-        uri: 'https://flyby-router-demo.herokuapp.com/',
+        uri: "https://flyby-router-demo.herokuapp.com/",
       }),
-    })
+    });
   }
 
   readonly Provider = ({ children }: PropsWithChildren) => {
-    return <ApolloProvider client={this.client}>{children}</ApolloProvider>
-  }
+    return <ApolloProvider client={this.client}>{children}</ApolloProvider>;
+  };
 }
+
+const gqlSvc = new GqlService();
+const GqlProvider = gqlSvc.Provider;
 
 function useApolloQuery(
   key: keyof typeof QUERY_KEYS,
-  variables: QueryHookOptions<any>,
+  variables?: QueryHookOptions<unknown>
 ) {
   return useQuery(QUERY_KEYS[key], {
+    client: gqlSvc.client,
     skip: false,
     onError: console.error,
     ...variables,
-  })
+  });
 }
 
-const gqlSvc = new GqlService()
-const GqlProvider = gqlSvc.Provider
+export { gqlSvc, GqlProvider, useApolloQuery };
 
-export { gqlSvc, GqlProvider, useApolloQuery }
+// usage:
+// gqlSvc.client
+//   .query({
+//     query: gql`
+//       query GetLocations {
+//         locations {
+//           id
+//           name
+//           description
+//           photo
+//         }
+//       }
+//     `,
+//   })
+//   .then((result) => console.log(result));
+
+// or with hooks
+// const { data } = useApolloQuery("locations", {});
