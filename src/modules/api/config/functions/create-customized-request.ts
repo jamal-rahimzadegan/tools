@@ -4,7 +4,7 @@ import interceptResponse from "../functions/intercept-response";
 
 export default function createCustomizedRequest(method, api: string, config: Record<string, any> = {}) {
     const {extraHeaders, data} = config || {};
-    const token = localStorage.get("token");
+    const token = localStorage.get("token"); // Replace it with your needs
 
     const instance: AxiosInstance = axios.create({
         method,
