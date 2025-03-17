@@ -10,7 +10,7 @@ import {
 import { QUERY_KEYS } from './query-keys'
 
 class GqlService {
-  readonly client: ApolloClient<unknown>;
+  readonly client: ApolloClient<unknown>; // NOTE: replace it based on your needs
 
   constructor() {
     this.client = new ApolloClient({
