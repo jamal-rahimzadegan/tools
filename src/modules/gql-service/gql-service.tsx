@@ -36,7 +36,7 @@ function useApolloQuery(
   return useQuery(QUERY_KEYS[key], {
     client: gqlSvc.client,
     skip: false,
-    onError: console.error,
+    onError: console.error, // NOTE: update it based on your needs
     ...variables,
   });
 }
